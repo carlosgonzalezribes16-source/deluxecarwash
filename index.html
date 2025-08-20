@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deluxe Car Wash Valencia</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Deluxe Car Wash Valencia</h1>
+    <nav>
+      <button onclick="openTab('servicios')">Servicios</button>
+      <button onclick="openTab('reservar')">Reservar</button>
+    </nav>
+  </header>
+
+  <section id="servicios" class="tab active">
+    <h2>Servicios disponibles</h2>
+    <div class="servicios">
+      <div class="card">
+        <h3>Lavado Exterior</h3>
+        <p>Duración: 30 min</p>
+        <p>Precio: desde 10 €</p>
+        <button onclick="preselectService('Lavado Exterior')">Elegir y reservar</button>
+      </div>
+      <div class="card">
+        <h3>Lavado Completo</h3>
+        <p>Duración: 60 min</p>
+        <p>Precio: desde 20 €</p>
+        <button onclick="preselectService('Lavado Completo')">Elegir y reservar</button>
+      </div>
+      <div class="card">
+        <h3>Limpieza Deluxe</h3>
+        <p>Duración: 90 min</p>
+        <p>Precio: desde 35 €</p>
+        <button onclick="preselectService('Limpieza Deluxe')">Elegir y reservar</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="reservar" class="tab">
+    <h2>Reserva tu cita</h2>
+    <form id="formReserva">
+      <input type="text" id="nombre" placeholder="Nombre" required />
+      <input type="text" id="telefono" placeholder="Teléfono (sin espacios ni guiones)" required />
+      <input type="email" id="correo" placeholder="Correo (opcional)" />
+      <input type="text" id="matricula" placeholder="Matrícula" required />
+      <input type="text" id="modelo" placeholder="Modelo del coche" required />
+      <select id="servicio" required>
+        <option value="">Selecciona un servicio</option>
+        <option>Lavado Exterior</option>
+        <option>Lavado Interior</option>
+        <option>Lavado Completo</option>
+        <option>Lavado con Cera</option>
+        <option>Limpieza Deluxe</option>
+        <option>Restauración de Faros</option>
+        <option>Limpieza de Tapicería</option>
+        <option>Pulimento de Carrocería</option>
+        <option>Lavado de Motos</option>
+      </select>
+      <input type="text" id="fecha" placeholder="Fecha (ej: 15/09/2025 o viernes que viene)" required />
+      <input type="text" id="hora" placeholder="Hora (ej: 16:30 o cuatro y media)" required />
+      <button type="submit">Enviar reserva</button>
+      <div id="mensaje"></div>
+    </form>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
