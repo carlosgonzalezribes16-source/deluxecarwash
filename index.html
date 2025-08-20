@@ -4,7 +4,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Deluxe Car Wash Valencia</title>
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body { margin:0; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, #0d0d0d 0%, #1a1a1a 100%); color:#f5f5f5; }
+    header { background: linear-gradient(90deg, #001f3f, #005f99); padding:1rem 2rem; text-align:center; color:#fff;
+      box-shadow:0 0 15px rgba(0,0,0,.6); }
+    h1 { font-size:2.2rem; font-weight:700; letter-spacing:1px; text-shadow:0 0 8px rgba(0,153,255,.8); }
+    nav { display:flex; justify-content:center; gap:.75rem; margin-top:.5rem; }
+    nav button { background:#0f3555; color:#eaf6ff; border:1px solid #1e5280; border-radius:8px; padding:.5rem .9rem; cursor:pointer; }
+    nav button:hover { background:#134265; }
+    .tab { display:none; padding:2rem; }
+    .active { display:block; }
+    .servicios { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; }
+    .card { background:#111; border-radius:12px; padding:1.5rem; box-shadow:0 0 15px rgba(0,153,255,.4); transition:.3s; }
+    .card:hover{ transform:translateY(-5px); box-shadow:0 0 25px rgba(0,153,255,.7); }
+    .card h3{ color:#00aaff; margin-top:0; }
+    .card button{ margin-top:1rem; background:linear-gradient(90deg,#0077cc,#00aaff); border:none; color:#fff;
+      padding:.6rem 1.2rem; border-radius:6px; cursor:pointer; }
+    .card button:hover{ background:linear-gradient(90deg,#0099ff,#33ccff); box-shadow:0 0 12px rgba(0,153,255,.8); }
+    form { max-width:900px; margin:0 auto; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem;
+      background:#111; padding:1.2rem; border-radius:12px; box-shadow:0 0 20px rgba(0,153,255,.5); }
+    form input,form select{ padding:.6rem; border:1px solid #333; border-radius:6px; background:#222; color:#fff; font-size:1rem; }
+    form button{ grid-column:1 / -1; background:linear-gradient(90deg,#0077cc,#00aaff); border:none; padding:.8rem; border-radius:6px;
+      font-size:1rem; color:#fff; cursor:pointer; }
+    #mensaje{ grid-column:1 / -1; margin-top:.25rem; font-weight:700; }
+    @media (max-width:800px){ form{ grid-template-columns:1fr; } }
+  </style>
 </head>
 <body>
   <header>
@@ -21,19 +46,19 @@
       <div class="card">
         <h3>Lavado Exterior</h3>
         <p>Duración: 30 min</p>
-        <p>Precio: desde 10 €</p>
+        <p>Precio: desde 20 €</p>
         <button onclick="preselectService('Lavado Exterior')">Elegir y reservar</button>
       </div>
       <div class="card">
         <h3>Lavado Completo</h3>
         <p>Duración: 60 min</p>
-        <p>Precio: desde 20 €</p>
+        <p>Precio: según tamaño</p>
         <button onclick="preselectService('Lavado Completo')">Elegir y reservar</button>
       </div>
       <div class="card">
         <h3>Limpieza Deluxe</h3>
         <p>Duración: 90 min</p>
-        <p>Precio: desde 35 €</p>
+        <p>Precio: según tamaño</p>
         <button onclick="preselectService('Limpieza Deluxe')">Elegir y reservar</button>
       </div>
     </div>
@@ -66,6 +91,35 @@
     </form>
   </section>
 
-  <script src="script.js"></script>
+  <script>
+    function openTab(id){ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+    function preselectService(serv){ openTab('reservar'); document.getElementById('servicio').value = serv; }
+
+    document.getElementById('formReserva').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const data = {
+        nombre: document.getElementById('nombre').value.trim(),
+        telefono: document.getElementById('telefono').value.replace(/\\D+/g,''),
+        correo: document.getElementById('correo').value.trim(),
+        matricula: document.getElementById('matricula').value.toUpperCase().replace(/\\s+/g,''),
+        modelo: document.getElementById('modelo').value.trim(),
+        servicio_coche: document.getElementById('servicio').value.trim(),
+        fecha: document.getElementById('fecha').value.trim(),
+        hora: document.getElementById('hora').value.trim(),
+        servicio: "reserva"
+      };
+      try{
+        const resp = await fetch("https://gonxo14.app.n8n.cloud/webhook/carwash", {
+          method:"POST", headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ body: data })
+        });
+        let txt = resp.ok ? "✅ Reserva enviada correctamente" : "❌ Error al enviar la reserva";
+        try{ const j = await resp.json(); if(j && j.mensaje) txt += "\\n" + j.mensaje; }catch{}
+        document.getElementById("mensaje").innerText = txt;
+      }catch(err){
+        document.getElementById("mensaje").innerText = "❌ Error de conexión";
+      }
+    });
+  </script>
 </body>
 </html>
